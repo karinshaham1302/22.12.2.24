@@ -1,0 +1,119 @@
+CREATE TABLE Lecturers (
+    lecturer_id INTEGER PRIMARY KEY AUTOINCREMENT,
+    name TEXT NOT NULL,
+    UNIQUE(name)
+);
+
+CREATE TABLE Courses (
+    course_id INTEGER PRIMARY KEY AUTOINCREMENT,
+    name TEXT NOT NULL,
+    lecturer_id INTEGER,
+    UNIQUE(name),
+    FOREIGN KEY (lecturer_id) REFERENCES Lecturers(lecturer_id)
+);
+
+
+1.
+SELECT Courses.name AS course, Lecturers.name AS lecturer
+FROM Courses
+INNER JOIN Lecturers ON Courses.lecturer_id = Lecturers.lecturer_id;
+
+
+2.
+SELECT Courses.name AS course, Lecturers.name AS lecturer
+FROM Courses
+LEFT JOIN Lecturers ON Courses.lecturer_id = Lecturers.lecturer_id;
+
+
+3.
+SELECT Lecturers.name AS lecturer, Courses.name AS course
+FROM Lecturers
+LEFT JOIN Courses ON Lecturers.lecturer_id = Courses.lecturer_id;
+
+
+4.
+SELECT Courses.name AS course
+FROM Courses
+LEFT JOIN Lecturers ON Courses.lecturer_id = Lecturers.lecturer_id
+WHERE Lecturers.lecturer_id IS NULL;
+
+
+5.
+SELECT Lecturers.name AS lecturer
+FROM Lecturers
+LEFT JOIN Courses ON Lecturers.lecturer_id = Courses.lecturer_id
+WHERE Courses.lecturer_id IS NULL;
+
+
+6.
+SELECT Courses.name AS course, Lecturers.name AS lecturer
+FROM Courses
+FULL JOIN Lecturers ON Courses.lecturer_id = Lecturers.lecturer_id;
+
+
+7.
+SELECT Lecturers.name AS lecturer, Courses.name AS course
+FROM Lecturers
+FULL JOIN Courses ON Lecturers.lecturer_id = Courses.lecturer_id
+WHERE Lecturers.lecturer_id IS NULL OR Courses.lecturer_id IS NULL;
+
+
+8.
+SELECT name AS lecturer
+FROM Lecturers
+WHERE name LIKE '%i%';
+
+
+9.
+SELECT COUNT(*) AS total_lecturers
+FROM Lecturers;
+
+
+10.
+SELECT COUNT(*) AS total_courses
+FROM Courses;
+
+
+11.
+ALTER TABLE Courses
+ADD COLUMN weekly_hours INTEGER;
+
+UPDATE Courses
+SET weekly_hours = 4
+WHERE course_id = 1;
+
+UPDATE Courses
+SET weekly_hours = 6
+WHERE course_id = 2;
+
+UPDATE Courses
+SET weekly_hours = 8
+WHERE course_id = 3;
+
+
+12.
+SELECT weekly_hours, COUNT(*) AS total_courses
+FROM Courses
+WHERE weekly_hours IS NOT NULL
+GROUP BY weekly_hours;
+
+
+13.
+SELECT Lecturers.name AS lecturer
+FROM Lecturers
+JOIN Courses ON Lecturers.lecturer_id = Courses.lecturer_id
+WHERE Courses.weekly_hours = 8;
+
+
+14.
+SELECT *
+FROM Courses
+WHERE weekly_hours = 4
+AND lecturer_id IS NULL;
+
+DELETE FROM Courses
+WHERE weekly_hours = 4
+AND lecturer_id IS NULL;
+
+
+
